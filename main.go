@@ -39,15 +39,19 @@ func (c *Config) refreshHandler(w http.ResponseWriter, h *http.Request) {
 }
 
 type ScanResult struct {
+	Queue int
 }
 
 func (c *Config) scanHandler(w http.ResponseWriter, h *http.Request) {
+	c.requestScan()
+
 	var result ScanResult
 	t, err := template.ParseFiles("templates/scan.html")
 	if err != nil {
 		log.Println("Error: ", err)
 		return
 	}
+	result.Queue = len(c.scanRequests)
 	t.Execute(w, result)
 }
 
@@ -59,6 +63,7 @@ func main() {
 
 	config := DefaultConfig()
 	config.refreshList()
+	go config.handleScanRequests()
 
 	http.HandleFunc("/", config.listHandler)
 	http.HandleFunc("/options", config.optionsHandler)

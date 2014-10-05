@@ -15,20 +15,19 @@
 					<ul class="nav navbar-nav navbar-left">
 						<li><a href="/scan">Nouveau scan</a></li>
 					</ul>
-					<!--
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="/options">Options</a></li>
 					</ul>
-					-->
 				</div>
 			</nav>
 
-			{{range .Items}}
-			<div class="scanitem">
-				<p class="text-center">#{{.Id}} ({{.Date}})</p>
-				<a href="{{.Filepath}}"><img src="{{.Thumbnail}}" /></a>
+			<div class="highlight">
+				Scan lancé ! ({{.Queue}} en attente)<br /><br />
+				<a href="/" role="button" class="btn btn-primary">Retour</a>
 			</div>
-			{{end}}
+
+
 		</div>
 	</body>
 </html>
+

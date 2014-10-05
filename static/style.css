@@ -2,6 +2,15 @@ body {
 	background-color: #EEE;
 }
 
+.highlight
+{
+	padding: 20px;
+	text-align: center;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
 .navbar-brand
 {
     position: absolute;

@@ -32,6 +32,7 @@ func (l *ItemList) Less(i, j int) bool {
 
 func (l *ItemList) refresh(dataDir string, targetPath string) error {
 	infos, err := ioutil.ReadDir(dataDir)
+	l.Items = []Item{}
 	if err != nil {
 		return err
 	}
