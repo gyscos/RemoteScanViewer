@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/style.css">
+
+	</head>
+	<body>
+		<div class="container">
+
+			<nav class="navbar navbar-default" role="navigation">
+				<p class="navbar-brand" href="#">Scans</p>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-left">
+						<li><a href="/scan">Nouveau scan</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="/options">Options</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			{{range .Items}}
+			<div class="scanitem">
+				<p class="text-center">#{{.Id}} ({{.Date}})</p>
+				<a href="{{.Filepath}}"><img src="{{.Thumbnail}}" /></a>
+			</div>
+			{{end}}
+		</div>
+	</body>
+</html>

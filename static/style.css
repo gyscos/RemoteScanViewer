@@ -1,0 +1,37 @@
+body {
+	background-color: #EEE;
+}
+
+.navbar-brand
+{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin: auto;
+}
+
+.brand
+{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin: auto;
+}
+
+.title {
+	background-color: #FFF;
+	border: 1px outset #DDD;
+	padding: 5px;
+	margin: 5px;
+}
+
+.scanitem {
+	background-color: #FFF;
+	border: 1px outset #DDD;
+	padding: 5px;
+	margin: 5px;
+	display: inline-block;
+
+}
