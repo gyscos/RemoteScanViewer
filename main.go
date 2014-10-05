@@ -74,7 +74,7 @@ func main() {
 	http.Handle(config.targetPath, http.StripPrefix(config.targetPath, http.FileServer(http.Dir(config.dataDir))))
 
 	log.Println("Listening on port 8080")
-	err := http.ListenAndServe("localhost:8080", nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Println("Error serving http:", err)
 	}
