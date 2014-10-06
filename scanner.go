@@ -14,7 +14,7 @@ import (
 func findFirstFree(directory string, prefix string) int {
 	iMax := 99999
 	for i := 1; i < iMax; i++ {
-		filename := directory + prefix + strconv.Itoa(i)
+		filename := directory + prefix + strconv.Itoa(i) + ".pdf"
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
 			return i
 		}

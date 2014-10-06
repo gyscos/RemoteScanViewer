@@ -10,6 +10,6 @@ PDF_DEST=${DEST_DIR}/${DEST}.pdf
 TBN_DEST=${DEST_DIR}/.thumb/${DEST}.png
 
 scanimage --resolution 200 --mode color --format tiff > ${TIF_DEST}
-tiff2pdf ${TIF_DEST} > ${PDF_DEST}
+tiff2pdf -j -q 100 -o ${PDF_DEST} ${TIF_DEST} 
 `dirname $0`/thumb.sh ${PDF_DEST} ${TBN_DEST}
 rm ${TIF_DEST}
