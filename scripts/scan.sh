@@ -10,5 +10,5 @@ TBN_DEST=.thumb/${DEST}.png
 
 scanimage --resolution 200 --mode color --format tiff > ${TIF_DEST}
 tiff2pdf ${TIF_DEST} > ${PDFDEST}
-convert -thumbnail x200 ${PDF_DEST} ${TBN_DEST}
+`dirname $0`/thumb.sh ${PDF_DEST} ${TBN_DEST}
 rm ${TIF_DEST}

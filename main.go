@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -35,7 +34,7 @@ func (c *Config) refreshHandler(w http.ResponseWriter, h *http.Request) {
 		log.Println(err)
 	}
 
-	fmt.Fprintln(w, "Ok!")
+	http.Redirect(w, h, "/", http.StatusTemporaryRedirect)
 }
 
 type ScanResult struct {

@@ -2,6 +2,8 @@ package main
 
 import (
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"sort"
 	"strings"
 	"time"
@@ -49,7 +51,13 @@ func (l *ItemList) refresh(dataDir string, targetPath string) error {
 		item.Filepath = targetPath + info.Name()
 		item.ModTime = info.ModTime()
 		item.Date = info.ModTime().Format("2006-01-02")
-		item.Thumbnail = targetPath + ".thumb/" + strings.TrimSuffix(info.Name(), ".pdf") + ".png"
+		thumbnail := ".thumb/" + strings.TrimSuffix(info.Name(), ".pdf") + ".png"
+		item.Thumbnail = targetPath + thumbnail
+
+		if _, err := os.Stat(dataDir + thumbnail); os.IsNotExist(err) {
+			// Generate thumbnail
+			exec.Command("scripts/thumb.sh", dataDir+info.Name(), dataDir+thumbnail).Run()
+		}
 
 		l.Items = append(l.Items, item)
 	}
