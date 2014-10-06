@@ -13,7 +13,7 @@ import (
 
 func findFirstFree(directory string, prefix string) int {
 	iMax := 99999
-	for i := 0; i < iMax; i++ {
+	for i := 1; i < iMax; i++ {
 		filename := directory + prefix + strconv.Itoa(i)
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
 			return i
@@ -24,10 +24,12 @@ func findFirstFree(directory string, prefix string) int {
 }
 
 func scanImage(directory string) {
-	namePrefix := time.Now().Format("2006-01-02 ")
+	namePrefix := time.Now().Format("2006-01-02_")
 	i := findFirstFree(directory, namePrefix)
 	filename := namePrefix + strconv.Itoa(i)
-	err := exec.Command("scripts/scan.sh", directory+filename).Run()
+	log.Println("scripts/scan.sh", directory, filename)
+	output,err := exec.Command("scripts/scan.sh", directory, filename).CombinedOutput()
+	log.Println(string(output))
 	if err != nil {
 		log.Println("Error:", err)
 	}
