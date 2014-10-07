@@ -26,6 +26,7 @@ func (c *Config) listHandler(w http.ResponseWriter, h *http.Request) {
 		log.Println("Error: ", err)
 		return
 	}
+	c.list.Ready = c.isReady()
 	t.Execute(w, c.list)
 }
 

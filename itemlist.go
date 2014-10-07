@@ -11,6 +11,7 @@ import (
 
 type ItemList struct {
 	Items []Item
+	Ready bool
 }
 
 type Item struct {

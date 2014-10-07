@@ -14,7 +14,7 @@
 				<p class="navbar-brand" href="#">Scans</p>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-left">
-						<li><a href="/scan">Nouveau scan</a></li>
+						<li><a id="scan_link" href="/scan">Scan en cours</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="/refresh">Rafraichir</a></li>
@@ -34,6 +34,7 @@
 			$.get("/scan/wait", function(data) {
 				$("#back_button").removeClass("btn-default").addClass("btn-primary");
 				$("#scan_status").html("Scan terminé !");
+				$("#scan_link").html("Nouveau scan");
 			});
 		</script>
 	</body>

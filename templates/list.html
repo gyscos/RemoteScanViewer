@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<!-- Latest compiled and minified CSS -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/static/style.css">
 		<title>Scans</title>
@@ -14,7 +15,7 @@
 				<p class="navbar-brand" href="#">Scans</p>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-left">
-						<li><a href="/scan">Nouveau scan</a></li>
+						<li><a href="/scan">{{if .Ready}}Nouveau scan{{else}}Scan en cours{{end}}</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="/refresh">Rafraichir</a></li>
@@ -29,5 +30,12 @@
 			</div>
 			{{end}}
 		</div>
+		{{if not .Ready}}
+		<script>
+			$.get("/scan/wait", function(data) {
+				location.reload(true);
+			});
+		</script>
+		{{end}}
 	</body>
 </html>
