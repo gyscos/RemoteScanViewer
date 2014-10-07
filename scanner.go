@@ -27,9 +27,7 @@ func scanImage(directory string) {
 	namePrefix := time.Now().Format("2006-01-02_")
 	i := findFirstFree(directory, namePrefix)
 	filename := namePrefix + strconv.Itoa(i)
-	log.Println("scripts/scan.sh", directory, filename)
-	output,err := exec.Command("scripts/scan.sh", directory, filename).CombinedOutput()
-	log.Println(string(output))
+	err := exec.Command("scripts/scan.sh", directory, filename).Run()
 	if err != nil {
 		log.Println("Error:", err)
 	}

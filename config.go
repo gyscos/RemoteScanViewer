@@ -1,6 +1,9 @@
 package main
 
-import "log"
+import (
+	"errors"
+	"log"
+)
 
 type Config struct {
 	list ItemList
@@ -12,13 +15,18 @@ type Config struct {
 	targetPath string
 
 	scanRequests chan struct{}
+	scannerReady chan struct{}
 }
 
 func DefaultConfig() Config {
-	return Config{
+	config := Config{
 		dataDir:      "/data/scans/",
 		targetPath:   "/scans/",
-		scanRequests: make(chan struct{}, 5)}
+		scanRequests: make(chan struct{}),
+		scannerReady: make(chan struct{}, 1)}
+
+	config.scannerReady <- struct{}{}
+	return config
 }
 
 func (c *Config) refreshList() error {
@@ -26,13 +34,34 @@ func (c *Config) refreshList() error {
 }
 
 func (c *Config) scan() {
-	log.Println("Scanning...")
 	scanImage(c.dataDir)
 	c.refreshList()
 }
 
-func (c *Config) requestScan() {
-	c.scanRequests <- struct{}{}
+func (c *Config) isReady() bool {
+
+	select {
+	case <-c.scannerReady:
+		c.scannerReady <- struct{}{}
+		return true
+	default:
+		return false
+	}
+}
+
+func (c *Config) waitUntilReady() {
+	<-c.scannerReady
+	c.scannerReady <- struct{}{}
+}
+
+func (c *Config) requestScan() error {
+	select {
+	case <-c.scannerReady:
+		c.scanRequests <- struct{}{}
+		return nil
+	default:
+		return errors.New("Scanner not ready!")
+	}
 }
 
 func (c *Config) handleScanRequests() {
@@ -40,6 +69,7 @@ func (c *Config) handleScanRequests() {
 	for {
 		<-c.scanRequests
 		c.scan()
+		c.scannerReady <- struct{}{}
 	}
 	log.Println("Leaving handleScanRequests")
 }

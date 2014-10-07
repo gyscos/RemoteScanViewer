@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -38,20 +39,28 @@ func (c *Config) refreshHandler(w http.ResponseWriter, h *http.Request) {
 }
 
 type ScanResult struct {
-	Queue int
+	Success bool
 }
 
 func (c *Config) scanHandler(w http.ResponseWriter, h *http.Request) {
-	c.requestScan()
-
 	var result ScanResult
+
+	err := c.requestScan()
+	result.Success = (err != nil)
+
 	t, err := template.ParseFiles("templates/scan.html")
 	if err != nil {
 		log.Println("Error: ", err)
 		return
 	}
-	result.Queue = len(c.scanRequests)
+
 	t.Execute(w, result)
+}
+
+func (c *Config) scanWaitHandler(w http.ResponseWriter, h *http.Request) {
+	// Wait for scan end
+	c.waitUntilReady()
+	fmt.Fprint(w, "ok")
 }
 
 func handleStyle(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +76,7 @@ func main() {
 	http.HandleFunc("/", config.listHandler)
 	http.HandleFunc("/options", config.optionsHandler)
 	http.HandleFunc("/scan", config.scanHandler)
+	http.HandleFunc("/scan/wait", config.scanWaitHandler)
 	http.HandleFunc("/refresh", config.refreshHandler)
 
 	http.HandleFunc("/static/style.css", handleStyle)

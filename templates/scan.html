@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<!-- Latest compiled and minified CSS -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/static/style.css">
 		<title>Scans</title>
-
 	</head>
 	<body>
 		<div class="container">
@@ -23,12 +23,19 @@
 			</nav>
 
 			<div class="highlight">
-				Scan lancé ! ({{.Queue}} en attente)<br /><br />
-				<a href="/" role="button" class="btn btn-primary">Retour</a>
+				<p id="scan_status">Scan en cours...</p>
+				<br />
+				<a href="/" role="button" id="back_button" class="btn btn-default">Retour</a>
 			</div>
 
 
 		</div>
+		<script>
+			$.get("/scan/wait", function(data) {
+				$("#back_button").removeClass("btn-default").addClass("btn-primary");
+				$("#scan_status").html("Scan terminé !");
+			});
+		</script>
 	</body>
 </html>
 
