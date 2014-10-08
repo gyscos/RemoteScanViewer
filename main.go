@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 )
 
 type OptionResult struct {
@@ -40,7 +41,9 @@ func (c *Config) refreshHandler(w http.ResponseWriter, h *http.Request) {
 }
 
 type ScanResult struct {
-	Success bool
+	Success  bool
+	Expected int
+	Elapsed  int
 }
 
 func (c *Config) scanHandler(w http.ResponseWriter, h *http.Request) {
@@ -48,6 +51,9 @@ func (c *Config) scanHandler(w http.ResponseWriter, h *http.Request) {
 
 	err := c.requestScan()
 	result.Success = (err != nil)
+
+	result.Expected = int(1000 * c.scanDuration.Seconds())
+	result.Elapsed = int(1000 * time.Since(c.scanStart).Seconds())
 
 	t, err := template.ParseFiles("templates/scan.html")
 	if err != nil {

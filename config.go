@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"log"
+	"time"
 )
 
 type Config struct {
@@ -16,12 +17,16 @@ type Config struct {
 
 	scanRequests chan struct{}
 	scannerReady chan struct{}
+
+	scanStart    time.Time
+	scanDuration time.Duration
 }
 
 func DefaultConfig() Config {
 	config := Config{
 		dataDir:      "/data/scans/",
 		targetPath:   "/scans/",
+		scanDuration: 10 * time.Second,
 		scanRequests: make(chan struct{}),
 		scannerReady: make(chan struct{}, 1)}
 
@@ -57,6 +62,7 @@ func (c *Config) waitUntilReady() {
 func (c *Config) requestScan() error {
 	select {
 	case <-c.scannerReady:
+		c.scanStart = time.Now()
 		c.scanRequests <- struct{}{}
 		return nil
 	default:
@@ -69,6 +75,7 @@ func (c *Config) handleScanRequests() {
 	for {
 		<-c.scanRequests
 		c.scan()
+		c.scanDuration = time.Since(c.scanStart)
 		c.scannerReady <- struct{}{}
 	}
 	log.Println("Leaving handleScanRequests")

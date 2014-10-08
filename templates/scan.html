@@ -24,18 +24,43 @@
 
 			<div class="highlight">
 				<p id="scan_status">Scan en cours...</p>
-				<br />
+				<div id="progress_div" class="progress">
+					<div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: calc(100% * {{.Elapsed}} / {{.Expected}});">
+						<span class="sr-only">60% Complete</span>
+					</div>
+				</div>
 				<a href="/" role="button" id="back_button" class="btn btn-default">Retour</a>
 			</div>
 
 
 		</div>
 		<script>
+			// Now, make the progress bar progress
+			function timeToProgress(elapsed, expected) {
+				var progress = 100 * elapsed / expected;
+				if (progress > 100) progress = 100;
+				return progress;
+			}
+
+			var pre_elapsed = {{.Elapsed}};
+			var expected = {{.Expected}};
+			//$("#progress_bar").width(timeToProgress(pre_elapsed, expected)+ "%");
+
+			var startTime = $.now();
+
+			var progress_timer = setInterval(function() {
+				var elapsed = $.now() - startTime;
+				$("#progress_bar").width(timeToProgress(pre_elapsed + elapsed, expected)+ "%");
+			}, 500);
+
 			$.get("/scan/wait", function(data) {
 				$("#back_button").removeClass("btn-default").addClass("btn-primary");
 				$("#scan_status").html("Scan terminé !");
 				$("#scan_link").html("Nouveau scan");
+				clearInterval(progress_timer);
+				$("#progress_div").css("visibility", "hidden");
 			});
+
 		</script>
 	</body>
 </html>
