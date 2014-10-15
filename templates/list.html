@@ -25,17 +25,28 @@
 
 			{{range .Items}}
 			<div class="scanitem">
-				<p class="text-center">#{{.Id}} ({{.Date}})</p>
-				<a href="{{.Filepath}}"><img src="{{.Thumbnail}}" /></a>
+				<p>#{{.Id}} ({{.Date}})</p>
+				<a href="{{.Filepath}}"><img src="{{.Thumbnail}}" /></a><br>
+				<button type="button" class="btn btn-default btn-sm" onclick="askForDelete('{{.Filepath}}')">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
 			</div>
 			{{end}}
 		</div>
-		{{if not .Ready}}
+		<div class="modal "></div>
 		<script>
+			function askForDelete(target) {
+				if (confirm("Supprimer ce fichier ?")) {
+					$.get("/remove?target="+target, function(data) {
+						location.reload(true);
+					});
+				}
+			}
+		{{if not .Ready}}
 			$.get("/scan/wait", function(data) {
 				location.reload(true);
 			});
-		</script>
 		{{end}}
+		</script>
 	</body>
 </html>

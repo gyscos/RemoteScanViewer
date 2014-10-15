@@ -20,6 +20,8 @@ type Config struct {
 
 	scanStart    time.Time
 	scanDuration time.Duration
+
+	dummyScan bool
 }
 
 func DefaultConfig() Config {
@@ -39,7 +41,11 @@ func (c *Config) refreshList() error {
 }
 
 func (c *Config) scan() {
-	scanImage(c.dataDir)
+	if c.dummyScan {
+		time.Sleep(10 * time.Second)
+	} else {
+		scanImage(c.dataDir)
+	}
 	c.refreshList()
 }
 
